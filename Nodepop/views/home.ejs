@@ -1,0 +1,23 @@
+<% include('header.ejs' )%>
+ 
+    <h1>
+        <%= appName %>
+    </h1>
+    <p> Hola soy <%= nombre %>
+    </p>
+    <h2>Condicionales</h2>
+    <p> El segundo actual es <%= actualSeconds %>
+    </p>
+    <% if (isEven) {%>
+        <p>El segundo actual es par.</p>
+        <% } else { %>
+            <p> El segundo actual es impar</p>
+            <% } %>
+
+    <h2>Bucles</h2>   
+    <% users.forEach(user => { %>
+        <p><%= user.name %> tiene <%= user.age %> años</p>
+   <% }) %>
+
+
+<% include('footer.ejs' )%>
