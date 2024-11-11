@@ -18,8 +18,12 @@ app.use(express.static('public'))
 app.get('/', homeController.index)
 app.get('/param_in_route/:num', homeController.paraInRouteExample)
 app.get('/param_in_route_multiple/:product/size/:size([0-9]+)/color/:color', homeController.paraInRouteMultipleExample)
+
 app.get('/param_in_query' , homeController.paramInQuery)
 app.post('/create-example' , homeController.createExample)
+app.get('/validate-query-example' ,
+    homeController.validateQueryExampleValidations  ,
+     homeController.validateQueryExample)
 
 
 //catch 404 and forward to error handler
@@ -27,8 +31,18 @@ app.use((req, res, next) => {
     next(createError(404))
   })
 
-app.use((err, req, res ,next) =>{
-    res.status(err.status || 500)
+// Middleware de manejo de errores
+app.use((err, req, res, next) => {  
+// validation errors
+
+if(err.array){
+    err.message = 'Invalid request: ' + err.array()
+        .map(e => `${e.location} ${e.type} ${e.path} ${e.msg}`)
+        .join(', ')
+    err.status  = 422  
+}
+
+ res.status(err.status || 500)
   
  //set locals, only provding error in development
  res.locals.message = err.message
