@@ -1,0 +1,28 @@
+<%- include('header.ejs') %>
+<div class="container">
+    <h1>New Product</h1>
+    <form method="POST">
+        <div class="mb-3">
+            <label for="InputName" class="form-label">Name</label>
+            <input type="text" name="name"  class="form-control" id="InputName" aria-describedby="name">
+        </div>
+
+        <div class="mb-3">
+            <label for="Inputprice" class="form-label">Price</label>
+            <input type="number" name="price"  class="form-control" id="Inputprice" aria-describedby="price">
+        <div class="mb-3">
+            <label for="InputImage" class="form-label">Image</label>
+            <input type="file" name="image" class="form-control" id="InputImage">
+        </div>
+        <div class="mb-3">
+            <label for="Inputtags" class="form-label">Tags (separados por comas)</label>
+            <input type="text" name="tags" class="form-control" id="Inputtags" placeholder="work, lifestyle, motor">
+        </div>
+        
+
+        <button type="submit" class="btn btn-primary">Submit</button>
+
+    </form>
+</div>
+
+<%- include('footer.ejs') %>

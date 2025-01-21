@@ -1,18 +1,16 @@
 import assert from 'node:assert'
 import {query ,validationResult} from 'express-validator'
+import Product from '../models/Product.js'
 
 
-export function index(req, res , next){
+export async function index(req, res , next){
 
-    const now = new Date()
+    const userId = req.session.userId
+    
+    if(userId){
+        res.locals.products = await Product.find({owner: userId })
+    }
 
-    res.locals.nombre = 'Jorge'
-    res.locals.isEven = (now.getSeconds() % 2 ) === 0
-    res.locals.actualSeconds = now.getSeconds()
-    res.locals.users = [
-        { name: 'Smith', age: 30},
-        { name: 'Brown', age: 42}
-    ]
     res.render('home')
     
 }
@@ -52,16 +50,18 @@ export function createExample(req,res ,next){
 
     res.send('Received ' + item)
 }
-export const validateQueryExampleValidations = [
+
+//validaciones express validator
+export const validateQueryExampleValidations = [//valdiador con nuestros requerimientos
     query('param1')
-    .isLength({ min: 4})
-    .withMessage('min 4 characters'),
+        .isLength({ min: 4})
+        .withMessage('min 4 characters'),
     query('param2')
-    .isNumeric()
-    .withMessage('must be numeric'),
+        .isNumeric()
+        .withMessage('must be numeric'),
     query('param3')
-    .custom( value => value === '42')
-    .withMessage ('must be 42')
+        .custom( value => value === '42')
+        .withMessage ('must be 42')
 ]
 export function validateQueryExample( req, res, next){
     validationResult(req).throw()
