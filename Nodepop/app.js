@@ -38,7 +38,7 @@ app.post('/products/new', productsController.validateProduct, productsController
 //private pages products
 app.get('/products/new', sessionManager.isLoggedIn, productsController.index);
 app.post('/products/new',sessionManager.isLoggedIn, productsController.postNew);
-app.get('/product/delete/:prodcutId', sessionManager.isLoggedIn, productsController.deleteProduct);
+app.get('/products/delete/:productId', sessionManager.isLoggedIn, productsController.deleteProduct);
 app.use(express.static('public'));
 
 

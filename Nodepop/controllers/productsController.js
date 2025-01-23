@@ -9,7 +9,9 @@ export function index(req,res,next){
 
 
 // validaciones
+
 export const validateProduct = [
+    /*
     body('name')
         .notEmpty().withMessage('El nombre es obligatorio')
         .isLength({ min: 4 }).withMessage('El nombre debe tener al menos 3 caracteres'),
@@ -24,11 +26,14 @@ export const validateProduct = [
     body('tags')
         .isArray().withMessage('Las etiquetas deben ser un arreglo')
         .custom(tags => {
-        const validTags = ['work', 'lifestyle', 'motor', 'mobile'];
-        return tags.every(tag => validTags.includes(tag));
+            const validTags = ['work', 'lifestyle', 'motor', 'mobile'];
+            return tags.every(tag =>    validTags.includes(body('tags')));
+            
         }).withMessage('Las etiquetas solo pueden ser: work, lifestyle, motor, mobile')
-];
 
+        */
+        
+];
 export async function postNew(req, res, next) {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -92,11 +97,11 @@ export async function deleteProduct(req, res, next) {
     // verificarn que existe
     if(!product){
         console.warn(`WARNING - el usuario ${userId} esta intentando eliminar un producto inexistente`)
-        next(createError(404, 'Not found'))
+        return next(createError(404, 'Not found'))
     }
     if (product.owner.toString() !== userId) {
         console.warn(`WARNING - el usuario ${userId} esta intentando eliminar un producto de otro usuario`)
-        next(createError(401, 'Not authorized'))
+        return next(createError(401, 'Not authorized'))
     }
     await Product.deleteOne({ _id: productId})
     res.redirect('/')
