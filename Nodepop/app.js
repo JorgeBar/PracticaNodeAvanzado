@@ -1,11 +1,20 @@
 import express from 'express'
 import createError from 'http-errors'
 import logger from 'morgan'
+import cookieParser from 'cookie-parser'
 import  * as homeController from  './controllers/homeController.js'
 import connectMongoose from './lib/connectMongoose.js'
 import * as loginController from  './controllers/loginController.js'
 import * as sessionManager from './lib/sessionMannager.js'
 import * as productsController from './controllers/productsController.js'
+import upload from './lib/uploadConfigure.js'
+import i18n from './lib/i18nConfigure.js'
+import * as langController from './controllers/langController.js'
+import * as apiProductsController from './controllers/api/api-productsController.js'
+import swaggerMiddleware from './lib/swaggerMiddleware.js'
+import * as apiLoginController from './controllers/api/api-loginController.js'
+import * as jwtAuth from './lib/jwtAuthMiddleware.js'
+import basicAuthMiddleware from './lib/basicAuthMIddleware.js'
 
 await connectMongoose()
 console.log('Conectado a MongoDB')
@@ -22,24 +31,43 @@ app.use(logger('dev'))//enseña logs en la consola de las peticiones que hagamos
 app.use(express.json())//parsear el body que venga en formato JSON
 app.use(express.urlencoded({ extended: false}))//parsear el body que venga en urlencoded (formularios)
 app.use(express.static('public'))//esto hace que el browser me devuelva lo que esta en esta carpeta
+app.use(cookieParser())
 
-//Aplication routes
+//API  routes
+
+app.post('/api/login', apiLoginController.loginJWT)
+
+//CRUD operations for products resource
+app.get('/api/products',jwtAuth.guard, apiProductsController.apiProductList)
+app.get('/api/products/:productId',jwtAuth.guard, apiProductsController.apiProductGetOne)
+app.post('/api/products',jwtAuth.guard,upload.single('image'), apiProductsController.apiProductNew)
+app.put('/api/products/:productId',jwtAuth.guard,upload.single('image'), apiProductsController.apiProductUpdate)
+app.delete('/api/products/:productId',jwtAuth.guard, apiProductsController.apiProductDelete)
+
+
+//Website  routes
 
 app.use(sessionManager.middleware , sessionManager.useSessionInViews)
+app.use(i18n.init)
+app.get('/change-locale/:locale', langController.changeLocale)// a esto se le llama parametro en ruta
 
 //public pages
-app.get('/', homeController.index)
+app.get('/', homeController.index)//añadimos esto antes del homeController si queremos usar el basic Auth basicAuthMiddleware,
 app.get('/login', loginController.index)
 app.post('/login', loginController.postLogin)
 app.all('/logout', loginController.logout)
-app.post('/products/new', productsController.validateProduct, productsController.postNew);
+app.post('/products/new', productsController.validateProduct,upload.single('image'), productsController.postNew);
+app.use('/api-doc', swaggerMiddleware)
 
 
 //private pages products
 app.get('/products/new', sessionManager.isLoggedIn, productsController.index);
-app.post('/products/new',sessionManager.isLoggedIn, productsController.postNew);
+//app.post('/products/new',sessionManager.isLoggedIn, productsController.postNew);//no funciona la subida de la imagen  upload.single('fotos'),
+app.post('/products/new',sessionManager.isLoggedIn,upload.single('image'),  productsController.postNew);
 app.get('/products/delete/:productId', sessionManager.isLoggedIn, productsController.deleteProduct);
-app.use(express.static('public'));
+app.use(express.static('public')); // Para archivos estáticos como CSS, JS, etc.
+
+//app.use('/images', express.static('images')); // Para las imágenes subidas
 
 
 
@@ -74,6 +102,13 @@ app.use((err, req, res, next) => {
     }
 
  res.status(err.status || 500)
+
+ // API error, send response with JSON
+ if (req.url.startsWith('/api/')) {
+    res.json({error: err.message})
+    return
+    //example http://localhost:3000/api/product/
+ }
   
  //set locals, only provding error in development
  res.locals.message = err.message

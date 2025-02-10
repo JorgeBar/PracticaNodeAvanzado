@@ -1,26 +1,30 @@
 <%- include('header.ejs') %>
+
+
 <div class="container">
-    <h1>New Product</h1>
-    <form method="POST">
+    <h1><%=__('New Product') %></h1>
+    <form method="POST" enctype="multipart/form-data">
         <div class="mb-3">
-            <label for="InputName" class="form-label">Name</label>
+            <label for="InputName" class="form-label"><%=__('Name') %></label>
             <input type="text" name="name"  class="form-control" id="InputName" aria-describedby="name">
         </div>
 
         <div class="mb-3">
-            <label for="Inputprice" class="form-label">Price</label>
+            <label for="Inputprice" class="form-label"><%=__('Price') %></label>
             <input type="number" name="price"  class="form-control" id="Inputprice" aria-describedby="price">
+        </div>   
         <div class="mb-3">
-            <label for="InputImage" class="form-label">Url Image</label>
-            <input type="url" name="image" class="form-control" id="InputImage">
-        </div>
+            <label for="customFile" class="form-label"><%=__('Image') %></label>
+            <input type="file" name="image" class="form-control" id="customFile">
+        </div>
+        
         <div class="mb-3">
-            <label for="Inputtags" class="form-label">Tags (separados por comas)</label>
+            <label for="Inputtags" class="form-label"><%=__('Tags(splitted by coms)') %></label>
             <input type="text" name="tags" class="form-control" id="Inputtags" placeholder="work, lifestyle, motor">
         </div>
         
 
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="submit" class="btn btn-primary"><%=__('Submit') %></button>
 
     </form>
 </div>

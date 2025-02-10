@@ -1,14 +1,33 @@
 import assert from 'node:assert'
 import {query ,validationResult} from 'express-validator'
 import Product from '../models/Product.js'
+import {io} from '../webSocketServer.js'
 
 
 export async function index(req, res , next){
 
     const userId = req.session.userId
+    const filterprice = req.query.price
+    const filtername = req.query.name
+    const limit = req.query.limit
+    const skip = req.query.skip
+    const sort = req.query.sort
     
     if(userId){
-        res.locals.products = await Product.find({owner: userId })
+
+        const filter = {owner: userId}
+        if(filterprice){
+            filter.price = filterprice
+        }
+        if(filtername){
+            filter.name = filtername
+        }
+        res.locals.products = await Product.list(filter, limit, skip, sort )
+
+        setTimeout(()=>{
+            console.log('Sending welcome message to userwith sessionId', req.session.id)
+            io.to(req.session.id).emit('server-message', `Welcome user : ${userId}`)
+        },2000)
     }
 
     res.render('home')

@@ -1,0 +1,22 @@
+{
+	"Users Products": "Users Products",
+	"Price": "Price",
+	"Pluralization example": "Pluralization example",
+	"Mouse": {
+		"one": "Mouse",
+		"other": "Mice"
+	},
+	"New Product": "New Product",
+	"Name": "Name",
+	"Image": "Image",
+	"Tags(splitted by coms)": "Tags(splitted by coms)",
+	"Submit": "Submit",
+	"Home": "Home",
+	"Search": "Search",
+	"LogOut": "LogOut",
+	"Api Documentation": "Api Documentation",
+	"Login": "Login",
+	"Product here": "Product here",
+	"Product": "Product",
+	"Tags": "Tags"
+}

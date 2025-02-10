@@ -1,4 +1,5 @@
 import User from '../models/User.js'
+import {io} from '../webSocketServer.js'
 
 
 export function index(req,res,next){
@@ -26,6 +27,9 @@ export async function postLogin(req, res ,next){
         req.session.userId = user._id
         req.session.userName = user.email
 
+        //enviar un email al usuario
+         user.sendEmail('Bienvenido', 'Bienvenido a Nodepop')
+
         //redirect a la home
         res.redirect('/')
     } catch (error) {
@@ -35,8 +39,10 @@ export async function postLogin(req, res ,next){
 }
 
 export function logout(req,res,next){
+    const previousSessionId = req.session.id
     req.session.regenerate(err=>{
         if(err) return next(err)
+        io.in(previousSessionId).disconnectSockets()
         res.redirect('/')
     })
 }

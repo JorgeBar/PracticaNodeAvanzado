@@ -1,0 +1,22 @@
+{
+	"Users Products": "Productos del usuario",
+	"Price": "Precio",
+	"Pluralization example": "Ejemplo de plurización",
+	"Mouse": {
+		"one": "Ratón",
+		"other": "Ratones"
+	},
+	"New Product": "Porducto Nuevo",
+	"Name": "Nombre",
+	"Image": "Imagen",
+	"Tags(splitted by coms)": "Etiquetas(separados por comas)",
+	"Submit": "Crear",
+	"Home": "Inicio",
+	"Search": "Buscar",
+	"LogOut": "Cerrar Sesión",
+	"Api Documentation": "Api Documentación",
+	"Login": "Iniciar sesión",
+	"Product here": "Producto aquí",
+	"Product": "Producto",
+	"Tags": "Etiquetas"
+}

@@ -1,3 +1,4 @@
+import 'dotenv/config'
 import readline from 'node:readline'
 import connectMongoose from "./lib/connectMongoose.js";
 import User from './models/User.js'
@@ -33,21 +34,21 @@ async function initProducts() {
             name: 'television', 
             price: 420, 
             owner: admin._id, 
-            image: '/assets/tvretro.jpg', // URL de ejemplo
+            image: 'tvretro.jpg', // URL de ejemplo
             tags: ["lifestyle"]
         },
         {
             name: 'radio', 
             price: 52.50, 
             owner: user1._id, 
-            image: '/assets/radio.jpg', // URL de ejemplo
+            image: 'radio.jpg', // URL de ejemplo
             tags: ["work"]
         },
         {
             name: 'portatil', 
             price: 1900.70, 
             owner: user1._id, 
-            image: '/assets/portatil.jpg', // URL de ejemplo
+            image: 'portatil.jpg', // URL de ejemplo
             tags: ["motor", "mobile"]
         }
     ]);
@@ -64,7 +65,8 @@ async function initUsers(){
     //create initial users
     const insertResult = await User.insertMany([
         {email:'admin@example.com', password: await User.hashPassword('1234')},
-        {email: 'user1@example.com', password: await User.hashPassword('1234')}
+        {email: 'user1@example.com', password: await User.hashPassword('1234')},
+        {email:'gorka6493@gmail.com', password: await User.hashPassword('1234')},
       
     ])
     console.log(`Created ${insertResult.length} users.`)

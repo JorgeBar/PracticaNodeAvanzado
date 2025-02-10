@@ -11,16 +11,17 @@ export function index(req,res,next){
 // validaciones
 
 export const validateProduct = [
-    /*
+
+ /*
     body('name')
-        .notEmpty().withMessage('El nombre es obligatorio')
-        .isLength({ min: 4 }).withMessage('El nombre debe tener al menos 3 caracteres'),
-
+    .notEmpty().withMessage('El nombre es obligatorio')
+    .isLength({ min: 3 }).withMessage('El nombre debe tener al menos 3 caracteres'),
+    
     body('price')
-        .notEmpty().withMessage('El precio es obligatorio')
-        .isNumeric().withMessage('El precio debe ser un número'),
+    .notEmpty().withMessage('El precio es obligatorio')
+    .isNumeric().withMessage('El precio debe ser un número'),
 
-    body('image')
+    body(body.image)
         .notEmpty().withMessage('La URL de la imagen es obligatoria'),
 
     body('tags')
@@ -32,10 +33,12 @@ export const validateProduct = [
         }).withMessage('Las etiquetas solo pueden ser: work, lifestyle, motor, mobile')
 
         */
-        
-];
+       
+    ]  
+
 export async function postNew(req, res, next) {
     const errors = validationResult(req);
+  
     if (!errors.isEmpty()) {
         console.log("Errores de validación:", errors.array()); // Imprime los errores en consola
 
@@ -44,13 +47,12 @@ export async function postNew(req, res, next) {
             errorMessage: errors.array().map(error => error.msg).join(', '),
             name: req.body.name,
             price: req.body.price,
-            image: req.body.image,
             tags: req.body.tags
         });
         }
     
         try {//prueba
-            let { name, price, image, tags } = req.body;
+            let { name, price, tags } = req.body;
             console.log("Etiquetas antes de la conversión:", tags);  // Agregar esta línea
 
             // Si 'tags' es una cadena, conviértela en un arreglo de etiquetas
@@ -68,16 +70,26 @@ export async function postNew(req, res, next) {
                     errorMessage: `Las siguientes etiquetas no son válidas: ${invalidTags.join(', ')}`,
                     name,
                     price,
-                    image,
                     tags
                 });
             }//hasta aqui la prueba
+
+            if (!req.file){
+                return res.render('new-product', {
+                    errorMessage: 'Debe subir una imagen.',
+                    name,
+                    price,
+                    tags
+                });
+            
+            }
         const product = new Product({
             name,
             price,
-            image,
+            image:req.file.filename,
             tags,
-            owner: req.session.userId
+            owner: req.session.userId,
+          
         });
         
         await product.save();

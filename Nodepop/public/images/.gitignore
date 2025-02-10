@@ -1,0 +1,5 @@
+# ignora todo el contenido de esta carpeta
+*
+
+#...excepto el gitignore
+!.gitignore
