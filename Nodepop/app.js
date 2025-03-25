@@ -14,7 +14,7 @@ import * as apiProductsController from './controllers/api/api-productsController
 import swaggerMiddleware from './lib/swaggerMiddleware.js'
 import * as apiLoginController from './controllers/api/api-loginController.js'
 import * as jwtAuth from './lib/jwtAuthMiddleware.js'
-import basicAuthMiddleware from './lib/basicAuthMIddleware.js'
+import basicAuthMiddleware from './lib/basicAuthMiddleware.js'
 
 await connectMongoose()
 console.log('Conectado a MongoDB')
