@@ -46,8 +46,15 @@
                 </div>
             <% }) %>
         <% } else { %>
-            <p>No tienes productos disponibles.</p>
+            <p><%=__('NotPro')%></p>
         <% } %>
+
+        <% if (skipPrev !== null) { %>
+            <a href="/?skip=<%= skipPrev %>"><%=__('prev')%></a>
+          <% } %>
+          <% if (skipNext !== null) { %>
+            <a href="/?skip=<%= skipNext %>"><%=__('Next')%></a>
+          <% } %>
     <% } %>
    
 </div>

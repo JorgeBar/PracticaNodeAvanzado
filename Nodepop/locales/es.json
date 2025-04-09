@@ -6,7 +6,7 @@
 		"one": "Ratón",
 		"other": "Ratones"
 	},
-	"New Product": "Porducto Nuevo",
+	"New Product": "Producto Nuevo",
 	"Name": "Nombre",
 	"Image": "Imagen",
 	"Tags(splitted by coms)": "Etiquetas(separados por comas)",
@@ -18,5 +18,8 @@
 	"Login": "Iniciar sesión",
 	"Product here": "Producto aquí",
 	"Product": "Producto",
-	"Tags": "Etiquetas"
+	"Tags": "Etiquetas",
+	"prev": "Anterior",
+	"Next": "Siguiente",
+	"NotPro": "No hay productos disponibles"
 }

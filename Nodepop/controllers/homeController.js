@@ -5,34 +5,49 @@ import {io} from '../webSocketServer.js'
 
 
 export async function index(req, res , next){
-
+    const pageSize = 10
     const userId = req.session.userId
     const filterprice = req.query.price
     const filtername = req.query.name
-    const limit = req.query.limit
-    const skip = req.query.skip
+    const limit = parseInt(req.query.limit) || pageSize
+    const skip = parseInt(req.query.skip) || 0
     const sort = req.query.sort
     
-    if(userId){
-
-        const filter = {owner: userId}
+    const filter = {}
+        if(userId){
+            
+            filter.owner=  userId
+        }
         if(filterprice){
             filter.price = filterprice
         }
         if(filtername){
             filter.name = filtername
         }
+        const totalProducts = await Product.countDocuments(filter)
+        const hasNext = skip + pageSize < totalProducts
+        
         res.locals.products = await Product.list(filter, limit, skip, sort )
+        
+        // pagination
+        res.locals.pageSize = pageSize
+        res.locals.skipPrev = skip >= pageSize ? skip - pageSize : null
+        res.locals.skipNext = hasNext ? skip + pageSize : null
+        if (userId){
 
-        setTimeout(()=>{
-            console.log('Sending welcome message to userwith sessionId', req.session.id)
-            io.to(req.session.id).emit('server-message', `Welcome user : ${userId}`)
-        },2000)
+            setTimeout(()=>{
+                console.log('Sending welcome message to userwith sessionId', req.session.id)
+                io.to(req.session.id).emit('server-message', `Welcome user : ${userId}`)
+            },200000)
+            
+        }
+        res.render('home')
     }
-
-    res.render('home')
+      
     
-}
+
+    
+
 // GET /param_in_route/44
 export function paraInRouteExample(req , res ,next){
     const num = req.params.num
@@ -89,3 +104,5 @@ export function validateQueryExample( req, res, next){
 
     res.send(`Validated  ${param1} ${param2}`)
 }
+
+

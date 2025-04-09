@@ -18,5 +18,8 @@
 	"Login": "Login",
 	"Product here": "Product here",
 	"Product": "Product",
-	"Tags": "Tags"
+	"Tags": "Tags",
+	"prev": "Prev",
+	"Next": "Next",
+	"NotPro": "Not products available"
 }
